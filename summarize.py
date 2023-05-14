@@ -8,8 +8,15 @@ from urllib.parse import urlparse
 app = Flask(__name__)
 
 # Your GPT-3 API key
-#openai.api_key = "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"
-openai.api_key="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"
+def read_api_secret_key(file_path):
+    with open(file_path, 'r') as file:
+        secret_key = file.read().strip()
+    return secret_key
+
+# Example usage
+file_path = 'api_secret_key.txt'
+openai.api_key = read_api_secret_key("./key.txt")
+
 
 
 def summarize_article(text):
@@ -32,6 +39,7 @@ Step5: count the number of words in the summary,remember the count
 step6: if the count is more than 450 or less than 350, re summarize to get the word count between 350 and 450 donot give it as output
 
 step7: add three dots at the end of the summary text and show"""
+    print("check-1")
     res=openai.ChatCompletion.create(
       model="gpt-3.5-turbo",
       max_tokens=450,
@@ -41,6 +49,8 @@ step7: add three dots at the end of the summary text and show"""
             {"role": "user", "content": "consider the following input text:{"+text+"}"},            
         ]
     )
+    print("check-2")
+
     return (res["choices"][0]["message"]["content"])
 
 @app.route('/')
@@ -55,10 +65,16 @@ def summarize():
             return render_template('index.html', error='Invalid URL')
         try:
             article = Article(url)
+            print("url parsing: ", url)
             article.download()
             article.parse()
             article_text = article.text
+            print("\n article parsed\n")
+
+
             summary = summarize_article(article_text)
+            print("\n article summarized\n")
+
             # Pass both the article_text and summary to the template
             return render_template('index.html', article_text=article_text, summary=summary)
         except Exception as e:
@@ -71,8 +87,11 @@ def summarize():
             article = Article(url)
             article.download()
             article.parse()
+            print("url parsing: ", url)
             article_text = article.text
+            print("\n article parsed\n", article_text)
             summary = summarize_article(article_text)
+            print("\n article summarized\n", summary)
             summaries.append(summary)
         df['summary'] = summaries
         excel_file = io.BytesIO()
@@ -84,4 +103,4 @@ def summarize():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=3000, debug=True)
