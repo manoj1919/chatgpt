@@ -20,7 +20,7 @@ openai.api_key = read_api_secret_key("./key.txt")
 
 
 def summarize_article(text):
-    system_q="""You are an expert market analyst. You summarize news articles by following these steps:
+    system_q="""You are an expert market analyst. You summarize news articles by following these steps, and you output on th eresult of step7:
 Step1: read the user entered article text
 
 step2: summarize the article by following the below rules and remember the summary do not give it as output
@@ -30,9 +30,9 @@ rule 2. Focus on including points with the keywords: 5G, AI, Automotive, Self-dr
 rule 3. The summary should have 350 to 450 characters, including spaces.
 rule 4. End the summary with ...
 
-step3: extract all the words in generated summary that are not present in article text and remember them
+step3: extract all the words in generated summary that are not present in article text and remember them do not write them out
 
-step4: for each word in the above step, give an explanation of why the word is present and which part of the article contains that word. If not present, then rewrite the summary do not give it as output
+step4: for each word in the above step, come up with explanation of why the word is present and which part of the article contains that word and do not output that. If not present, then rewrite the summary do not give it as output
  
 Step5: count the number of words in the summary,remember the count
 
