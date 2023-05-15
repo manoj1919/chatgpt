@@ -38,7 +38,7 @@ Step5: count the number of words in the summary,remember the count
 
 step6: if the count is more than 450 or less than 350, re summarize to get the word count between 350 and 450 donot give it as output
 
-step7: add three dots at the end of the summary text and show"""
+step7: add three dots at the end of the summary text and output just the sumary and do not output any explanation"""
     print("check-1")
     res=openai.ChatCompletion.create(
       model="gpt-3.5-turbo",
